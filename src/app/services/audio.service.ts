@@ -50,6 +50,7 @@ export class AudioService {
         break;
       case "timeupdate":
         this.state.currentTime = this.audioObj.currentTime;
+        this.state.currentTime = this.audioObj.currentTime;
         this.state.readableCurrentTime = this.formatTime(
           this.state.currentTime
         );
@@ -130,6 +131,7 @@ export class AudioService {
   }
 
   seekTo(seconds: number) {
+
     this.audioObj.currentTime = seconds;
   }
 
