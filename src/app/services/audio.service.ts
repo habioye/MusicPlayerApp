@@ -72,7 +72,11 @@ export class AudioService {
       error: false
     };
   }
-  
+
+  getState(): Observable<StreamState> {
+    return this.stateChange.asObservable();
+  }
+
   private streamObservable(url: string): any {
     return new Observable(observer => {
       // Play audio
