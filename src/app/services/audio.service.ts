@@ -22,8 +22,8 @@ export class AudioService {
     "loadstart"
   ];
 
-  private streamObservable(url:string) {
-    new Observable(observer => {
+  private streamObservable(url:string):any {
+    return new Observable(observer => {
       // Play audio
       this.audioObj.src = url;
       this.audioObj.load();
@@ -55,4 +55,28 @@ export class AudioService {
       obj.removeEventListener(event, handler);
     });
   }
+  playStream(url:string):any {
+    return this.streamObservable(url).pipe(takeUntil(this.stop$));
+  }
+  play() {
+    this.audioObj.play();
+  }
+
+  pause() {
+    this.audioObj.pause();
+  }
+
+  stop() {
+    this.stop$.next("stop");
+  }
+
+  seekTo(seconds:number) {
+    this.audioObj.currentTime = seconds;
+  }
+
+  formatTime(time: number, format: string = "HH:mm:ss") {
+    const momentTime = time * 1000;
+    return moment.utc(momentTime).format(format);
+  }
+
 }
