@@ -60,7 +60,7 @@ export class AuthService {
     }
   };
 
-  private _setAuth = authResult => {
+  private _setAuth = (authResult: readonly unknown[]) => {
     // Save authentication data and update login status subject
     // Observable of token
     this.token$ = of(authResult.accessToken);
@@ -76,7 +76,7 @@ export class AuthService {
   };
 
   get authenticated(): boolean {
-    return JSON.parse(localStorage.getItem(this._authFlag));
+    return JSON.parse(localStorage.getItem(this._authFlag)||'{}');
   }
 
   renewAuth() {
@@ -109,7 +109,7 @@ export class AuthService {
 
   // Utility functions
 
-  private _handleError = err => {
+  private _handleError = (err: { error_description: any; }) => {
     if (err.error_description) {
       console.error(`Error: ${err.error_description}`);
     } else {

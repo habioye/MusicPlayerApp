@@ -3,6 +3,7 @@ import { MatSlider } from '@angular/material/slider';
 import { AudioService } from '../../services/audio.service';
 import { CloudService } from '../../services/cloud.service';
 import { StreamState } from '../../../interfaces/stream-state';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-player',
@@ -20,7 +21,7 @@ export class PlayerComponent {
   state: StreamState | undefined;
   currentFile: any = {};
 
-  constructor( public audioService: AudioService, public cloudService: CloudService) {
+  constructor( public audioService: AudioService, public cloudService: CloudService,public auth: AuthService) {
     // get media files
     cloudService.getFiles().subscribe((files) => {
       this.files = files;
