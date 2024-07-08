@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable, BehaviorSubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import * as moment from "moment";
+import { StreamState } from "../../interfaces/stream-state";
 
 @Injectable({
   providedIn: "root"
@@ -21,6 +22,15 @@ export class AudioService {
     "loadedmetadata",
     "loadstart"
   ];
+  private state: StreamState = {
+    playing: false,
+    readableCurrentTime: '',
+    readableDuration: '',
+    duration: undefined,
+    currentTime: undefined,
+    canplay: false,
+    error: false,
+  }
 
   private streamObservable(url:string):any {
     return new Observable(observer => {
