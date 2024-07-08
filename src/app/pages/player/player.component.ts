@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { MatSlider } from '@angular/material/slider';
+import { AudioService } from "../../services/audio.service";
+import { CloudService } from "../../services/cloud.service";
+import { StreamState } from "../../../interfaces/stream-state";
 
 @Component({
   selector: 'app-player',
@@ -13,7 +16,8 @@ export class PlayerComponent {
     { name: "First Song", artist: "Inder" },
     { name: "Second Song", artist: "You" }
   ];
-  state:MatSlider = new MatSlider();
+  // state:MatSlider = new MatSlider();
+  state: StreamState;
   currentFile: any = {};
 
   isFirstPlaying() {
@@ -32,7 +36,7 @@ export class PlayerComponent {
 
   }
   previous() {
-  
+
   }
   onSliderChangeEnd(input:any) {
 
