@@ -17,7 +17,7 @@ export class PlayerComponent {
     { name: 'Second Song', artist: 'You' },
   ];
   // state:MatSlider = new MatSlider();
-  state: StreamState;
+  state: StreamState | undefined;
   currentFile: any = {};
 
   constructor( public audioService: AudioService, public cloudService: CloudService) {
@@ -33,14 +33,43 @@ export class PlayerComponent {
   }
 
   isFirstPlaying() {
-    return false;
+
+    return this.currentFile.index === 0;
   }
   isLastPlaying() {
-    return true;
+    return this.currentFile.index === this.files.length - 1;
   }
-  play() { }
-  pause() { }
-  next() { }
-  previous() { }
-  onSliderChangeEnd(input: any) { }
+  play() {
+    this.audioService.play();
+  }
+  pause() {
+    this.audioService.pause();
+  }
+  next() {
+    const index = this.currentFile.index + 1;
+    const file = this.files[index];
+    this.openFile(file, index);
+  }
+  previous() {
+    const index = this.currentFile.index - 1;
+    const file = this.files[index];
+    this.openFile(file, index);
+  }
+  onSliderChangeEnd(change: any) {
+    this.audioService.seekTo(change.value);
+  }
+
+  playStream(url:string) {
+    this.audioService.playStream(url).subscribe((events: any) => {
+      // listening for fun here
+    });
+  }
+  openFile(file: { url: string; }, index: any) {
+    this.currentFile = { index, file };
+    this.audioService.stop();
+    this.playStream(file.url);
+  }
+  stop() {
+    this.audioService.stop();
+  }
 }
