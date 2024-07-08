@@ -31,8 +31,49 @@ export class AudioService {
     canplay: false,
     error: false,
   }
+  private stateChange: BehaviorSubject<StreamState> = new BehaviorSubject(
+    this.state
+  );
 
-  private streamObservable(url:string):any {
+  private updateStateEvents(event: Event): void {
+    switch (event.type) {
+      case "canplay":
+        this.state.duration = this.audioObj.duration;
+        this.state.readableDuration = this.formatTime(this.state.duration);
+        this.state.canplay = true;
+        break;
+      case "playing":
+        this.state.playing = true;
+        break;
+      case "pause":
+        this.state.playing = false;
+        break;
+      case "timeupdate":
+        this.state.currentTime = this.audioObj.currentTime;
+        this.state.readableCurrentTime = this.formatTime(
+          this.state.currentTime
+        );
+        break;
+      case "error":
+        this.resetState();
+        this.state.error = true;
+        break;
+    }
+    this.stateChange.next(this.state);
+  }
+  private resetState() {
+    this.state = {
+      playing: false,
+      readableCurrentTime: '',
+      readableDuration: '',
+      duration: undefined,
+      currentTime: undefined,
+      canplay: false,
+      error: false
+    };
+  }
+  
+  private streamObservable(url: string): any {
     return new Observable(observer => {
       // Play audio
       this.audioObj.src = url;
@@ -65,7 +106,7 @@ export class AudioService {
       obj.removeEventListener(event, handler);
     });
   }
-  playStream(url:string):any {
+  playStream(url: string): any {
     return this.streamObservable(url).pipe(takeUntil(this.stop$));
   }
   play() {
@@ -80,7 +121,7 @@ export class AudioService {
     this.stop$.next("stop");
   }
 
-  seekTo(seconds:number) {
+  seekTo(seconds: number) {
     this.audioObj.currentTime = seconds;
   }
 
